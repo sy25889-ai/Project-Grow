@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+:root { --background:#102926; --foreground:#f8f6e6; --primary:#f6c865; --primary-foreground:#18362e; --ring:#ffe4a0; --radius:.5rem; --font-sans:Arial, Helvetica, sans-serif; }
+* { box-sizing:border-box; }
+html, body { min-height:100%; margin:0; overflow:hidden; background:var(--background); }
+body, button { font-family:Arial, Helvetica, sans-serif; }
+body { color:var(--foreground); }
+.game-shell { position:fixed; inset:0; min-width:680px; overflow:hidden; background:#79b6c4; isolation:isolate; }
+.battle-canvas { position:absolute; inset:0; z-index:0; }
+.battle-canvas canvas { display:block; width:100%; height:100%; }
+.game-shell::before { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(180deg,rgb(11 42 36 / 42%),transparent 24%,transparent 68%,rgb(12 38 31 / 58%)); }
+.game-shell::after { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.4; background:radial-gradient(ellipse at center,transparent 53%,rgb(8 33 28 / 45%) 100%); }
+.game-topbar, .boss-hud, .party-hud, .command-hud, .battle-callout { position:absolute; z-index:2; }
+
+.game-topbar { top:max(13px,env(safe-area-inset-top)); left:max(18px,env(safe-area-inset-left)); right:max(18px,env(safe-area-inset-right)); display:grid; grid-template-columns:1fr auto 1fr; align-items:center; pointer-events:none; }
+.stage-lockup { display:flex; align-items:center; gap:10px; text-shadow:0 2px 5px rgb(6 33 27 / 80%); }
+.chapter-mark { display:grid; width:36px; height:36px; place-items:center; border:1px solid rgb(255 238 177 / 75%); border-radius:7px; background:linear-gradient(145deg,#365f52,#16352f); box-shadow:inset 0 1px rgb(255 248 202 / 23%),0 3px 8px rgb(5 28 23 / 28%); color:#fff0b2; font-size:12px; font-weight:900; }
+.stage-lockup p, .stage-lockup strong, .prototype-mark span, .boss-heading p, .party-caption span, .ultimate-name { margin:0; letter-spacing:0; }
+.stage-lockup p { color:#c8ecce; font-size:10px; line-height:1; }
+.stage-lockup strong { display:block; margin-top:3px; color:#fff9dd; font-size:13px; line-height:1.05; }
+.timer-lockup { display:flex; align-items:center; gap:7px; color:#fff8d5; filter:drop-shadow(0 2px 4px rgb(8 36 30 / 80%)); }
+.timer-lockup strong { font-size:clamp(20px,2.2vw,30px); font-variant-numeric:tabular-nums; }
+.prototype-mark { justify-self:end; display:flex; align-items:center; gap:5px; border:1px solid rgb(30 66 53 / 38%); border-radius:5px; background:rgb(239 255 215 / 82%); padding:5px 8px; color:#1d4b3d; font-size:9px; font-weight:900; box-shadow:0 2px 6px rgb(6 32 26 / 13%); }
+
+.boss-hud { top:max(55px,calc(env(safe-area-inset-top) + 45px)); left:50%; width:min(480px,52vw); transform:translateX(-50%); filter:drop-shadow(0 3px 5px rgb(5 30 25 / 70%)); }
+.boss-heading { display:flex; align-items:end; justify-content:space-between; gap:12px; padding:0 10px 4px; }
+.boss-heading p { color:#daefc5; font-size:9px; font-weight:900; }
+.boss-heading h1 { margin:2px 0 0; color:#fff7d6; font-size:clamp(14px,1.5vw,19px); line-height:1.1; text-shadow:0 2px 4px rgb(5 31 26 / 90%); }
+.groggy-chip { border:1px solid #fff0a9; border-radius:4px; background:linear-gradient(180deg,#ffe28d,#e8a64b); padding:4px 7px; color:#563510; font-size:10px; font-weight:900; box-shadow:0 2px 4px rgb(0 0 0 / 20%); }
+.meter-block { overflow:hidden; border:1px solid rgb(229 255 217 / 35%); border-radius:5px; background:rgb(9 38 31 / 66%); box-shadow:inset 0 1px rgb(250 255 225 / 10%); }
+.meter-block + .meter-block { margin-top:4px; }
+.meter-label { display:flex; justify-content:space-between; padding:3px 7px 2px; color:#ebf7e5; font-size:9px; font-weight:800; }
+.meter-label b { font-variant-numeric:tabular-nums; }
+.meter-track { height:10px; overflow:hidden; background:rgb(3 24 19 / 88%); box-shadow:inset 0 1px 3px rgb(0 0 0 / 45%); }
+.meter-track span { display:block; height:100%; transition:width 150ms linear; }
+.boss-fill { background:linear-gradient(90deg,#b73d42,#e66c59 44%,#f09c64); box-shadow:inset 0 1px rgb(255 243 195 / 45%),0 0 13px rgb(229 89 75 / 55%); }
+.barrier-fill { background:repeating-linear-gradient(135deg,#78cce4 0 8px,#a5f0ef 8px 15px); box-shadow:inset 0 1px rgb(255 255 255 / 55%),0 0 12px rgb(122 230 238 / 75%); }
+
+.battle-callout { top:calc(50% + 32px); left:50%; display:flex; align-items:center; gap:6px; transform:translateX(-50%); max-width:38vw; color:#fff5cc; font-size:clamp(10px,1.15vw,13px); font-weight:800; white-space:nowrap; text-shadow:0 2px 5px rgb(6 31 25 / 85%); }
+.event-spark { display:block; width:6px; height:6px; flex:none; border-radius:50%; background:#f9d46d; box-shadow:0 0 8px #ffe38a; }
+
+.party-hud { bottom:max(18px,env(safe-area-inset-bottom)); left:max(16px,env(safe-area-inset-left)); width:min(374px,42vw); }
+.party-caption { display:flex; justify-content:space-between; margin:0 6px 5px; color:#eefadc; font-size:9px; font-weight:900; text-shadow:0 2px 5px rgb(6 32 26 / 90%); }
+.party-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:5px; }
+.party-member { display:flex; min-width:0; align-items:center; gap:7px; border:1px solid rgb(222 250 207 / 32%); border-radius:7px; background:linear-gradient(90deg,rgb(10 48 39 / 92%),rgb(18 70 55 / 70%)); padding:5px 7px 5px 5px; box-shadow:inset 0 1px rgb(255 255 225 / 10%),0 2px 5px rgb(2 20 16 / 20%); }
+.party-avatar { position:relative; display:grid; flex:none; width:29px; height:29px; place-items:center; overflow:hidden; border:2px solid var(--member-color); border-radius:50%; background:radial-gradient(circle at 50% 39%,#f7d2a8 0 20%,var(--member-color) 21% 54%,#1a3b33 55%); box-shadow:0 0 0 1px rgb(12 40 32 / 80%),0 1px 4px rgb(0 0 0 / 45%); }
+.party-avatar i { position:absolute; top:3px; width:16px; height:8px; border-radius:10px 10px 3px 3px; background:#2c302b; }
+.party-avatar.role-ranged i { background:#53325c; }.party-avatar.role-support i { background:#28554f; }.party-avatar.role-melee i { background:#6c3c29; }
+.party-avatar b { position:relative; z-index:1; align-self:end; margin-bottom:1px; color:#fff7d8; font-size:8px; text-shadow:0 1px 2px #162b25; }
+.party-health { min-width:0; flex:1; }
+.party-health > div:first-child { display:flex; justify-content:space-between; gap:4px; overflow:hidden; color:#f5fae8; font-size:10px; line-height:1; }
+.party-health b { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }.party-health span { color:#b6dfbc; font-size:8px; }
+.member-health-track { height:5px; overflow:hidden; margin-top:5px; border:1px solid rgb(0 0 0 / 28%); border-radius:3px; background:#092820; }
+.member-health-track i { display:block; height:100%; background:linear-gradient(90deg,#5eaf62,#abdf6d); box-shadow:0 0 5px rgb(160 225 105 / 62%); transition:width 150ms linear; }
+
+.command-hud { right:max(16px,env(safe-area-inset-right)); bottom:max(15px,env(safe-area-inset-bottom)); }
+.command-row { display:flex; align-items:end; gap:7px; }
+.ultimate-button { display:grid; width:55px; height:66px; grid-template-rows:48px auto; border:0; border-radius:0; background:transparent; padding:0; color:#fff4c7; box-shadow:none; }
+.ultimate-button:hover { background:transparent; }.ultimate-button:disabled { opacity:1; }
+.ultimate-ring { position:relative; display:grid; width:47px; height:47px; place-items:center; justify-self:center; overflow:hidden; border:2px solid rgb(235 249 218 / 62%); border-radius:50%; background:conic-gradient(var(--member-color) var(--charge),rgb(14 55 45 / 95%) 0); box-shadow:0 2px 7px rgb(2 20 16 / 70%),inset 0 1px rgb(255 255 255 / 26%); }
+.ultimate-ring::before { content:''; position:absolute; inset:4px; border-radius:50%; background:radial-gradient(circle at 50% 37%,#f4d2ad 0 17%,var(--member-color) 18% 46%,#183c33 47% 100%); }
+.ultimate-ring svg { position:absolute; z-index:2; right:3px; bottom:2px; color:#fff4a8; filter:drop-shadow(0 1px 2px #17372f); }
+.ultimate-portrait { position:relative; z-index:1; align-self:end; margin-bottom:6px; color:#fff7d8; font-size:10px; font-weight:900; text-shadow:0 1px 2px #17372f; }
+.ultimate-name { color:#f2f8df; font-size:9px; font-weight:900; text-align:center; text-shadow:0 2px 5px rgb(4 28 22 / 90%); }
+.ultimate-button.is-ready .ultimate-ring { border-color:#fff1ae; box-shadow:0 0 0 2px rgb(255 214 101 / 70%),0 0 19px rgb(255 211 93 / 95%); animation:ultimate-ready 1s ease-in-out infinite; }
+.auto-button { display:grid; width:53px; height:53px; place-items:center; gap:0; border:1px solid rgb(236 251 212 / 62%); border-radius:8px; background:linear-gradient(145deg,rgb(27 84 68 / 95%),rgb(10 47 39 / 95%)); padding:4px; color:#eef9df; font-size:10px; font-weight:900; line-height:1; box-shadow:inset 0 1px rgb(255 255 255 / 15%),0 3px 7px rgb(2 20 16 / 35%); }
+.auto-button:hover { background:linear-gradient(145deg,rgb(40 104 83 / 96%),rgb(14 60 48 / 96%)); }.auto-button.is-enabled { border-color:#ffdf86; background:linear-gradient(145deg,#ffd269,#dc9d43); color:#234439; box-shadow:0 0 16px rgb(255 207 94 / 82%),inset 0 1px rgb(255 255 210 / 65%); }
+.result-overlay { position:absolute; inset:0; z-index:4; display:grid; place-items:center; background:rgb(9 30 25 / 42%); backdrop-filter:blur(3px); }.result-card { min-width:230px; border:1px solid rgb(255 243 188 / 55%); border-radius:8px; background:rgb(20 58 48 / 93%); padding:20px; text-align:center; box-shadow:0 16px 44px rgb(0 0 0 / 35%); }.result-card p { margin:0; color:#d6edb8; font-size:10px; font-weight:900; }.result-card h2 { margin:5px 0 15px; color:#fff3bc; font-size:29px; letter-spacing:0; }.result-card button { min-height:34px; background:#f2c565; color:#244038; }
+@keyframes ultimate-ready { 50% { transform:scale(1.07); } }
+@media (max-height:460px) { .boss-hud { top:49px; width:min(430px,53vw); }.battle-callout { top:calc(50% + 20px); }.party-hud { bottom:10px; }.command-hud { bottom:9px; }.party-member { padding:4px; }.party-avatar { width:26px; height:26px; }.ultimate-button { width:48px; height:57px; grid-template-rows:41px auto; }.ultimate-ring { width:40px; height:40px; }.auto-button { width:47px; height:47px; }.meter-track { height:8px; } }
